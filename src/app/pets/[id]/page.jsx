@@ -14,7 +14,9 @@ export default function PetDetailsPage() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    api.get(`/pets/${id}`).then(res => setPet(res.data));
+    api.get(`/api/pets/${id}`)
+      .then(res => setPet(res.data))
+      .catch(err => console.error("Error fetching pet details:", err));
   }, [id]);
 
   if (!pet) return <div className="text-center py-20 text-gray-500">Loading details...</div>;
@@ -42,29 +44,34 @@ export default function PetDetailsPage() {
     };
 
     try {
-      await api.post('/requests', requestData);
+      await api.post('/api/requests', requestData);
       toast.success("Adoption request sent successfully!");
       router.push('/dashboard/my-requests');
-    } catch {
+    } catch (error) {
       toast.error("Failed to send request.");
     }
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 p-4 max-w-7xl mx-auto">
       <div className="lg:col-span-2 bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-        <img src={pet.image} alt={pet.name} className="w-full h-96 object-cover" />
+        {/* 📋 এখানে pet.imageURL ফিক্স করা হয়েছে */}
+        <img src={pet.imageURL} alt={pet.name} className="w-full h-96 object-cover" />
         <div className="p-6 space-y-4">
           <div className="flex justify-between items-center">
             <h1 className="text-3xl font-bold">{pet.name}</h1>
-            <span className={`px-4 py-1.5 rounded-full text-sm font-semibold ${pet.status === 'adopted' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>{pet.status}</span>
+            <span className={`px-4 py-1.5 rounded-full text-sm font-semibold capitalize ${pet.status === 'adopted' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+              {pet.status || 'available'}
+            </span>
           </div>
+          
           <div className="grid grid-cols-2 gap-4 text-sm bg-gray-50 p-4 rounded-xl">
-            <p><strong>Breed:</strong> {pet.breed}</p>
-            <p>strong&gt;Age:&lt;/strong&gt; {pet.age} Years</p>
-            <p><strong>Gender:</strong> {pet.gender}</p>
-            <p><strong>Health Status:</strong> {pet.healthStatus}</p>
+            <p><strong>Breed:</strong> {pet.breed || 'N/A'}</p>
+            <p><strong>Age:</strong> {pet.age} Years</p>
+            <p><strong>Gender:</strong> {pet.gender || 'N/A'}</p>
+            <p><strong>Health Status:</strong> {pet.healthStatus || 'N/A'}</p>
           </div>
+          
           <p className="text-gray-600 leading-relaxed">{pet.description}</p>
         </div>
       </div>
@@ -78,11 +85,11 @@ export default function PetDetailsPage() {
           <form onSubmit={handleAdoptSubmit} className="space-y-4">
             <div>
               <label className="text-xs text-gray-500">Pet Name</label>
-              <input type="text" value={pet.name} readOnly className="w-full p-2.5 bg-gray-50 border rounded-lg" />
+              <input type="text" value={pet.name} readOnly className="w-full p-2.5 bg-gray-50 border rounded-lg outline-none" />
             </div>
             <div>
               <label className="text-xs text-gray-500">Requester Email</label>
-              <input type="text" value={user?.email || 'Login Required'} readOnly className="w-full p-2.5 bg-gray-50 border rounded-lg" />
+              <input type="text" value={user?.email || 'Login Required'} readOnly className="w-full p-2.5 bg-gray-50 border rounded-lg outline-none" />
             </div>
             <div>
               <label className="text-xs text-gray-500">Preferred Pickup Date</label>
@@ -92,7 +99,13 @@ export default function PetDetailsPage() {
               <label className="text-xs text-gray-500">Why do you want to adopt?</label>
               <textarea required value={message} onChange={e => setMessage(e.target.value)} rows="3" className="w-full p-2.5 border rounded-lg focus:outline-teal-500"></textarea>
             </div>
-            <button type="submit" disabled={user?.email === pet.ownerEmail} className="w-full bg-teal-600 text-white py-3 rounded-lg font-semibold hover:bg-teal-700 disabled:bg-gray-300">Submit adoption request</button>
+            <button 
+              type="submit" 
+              disabled={user?.email === pet.ownerEmail} 
+              className="w-full bg-teal-600 text-white py-3 rounded-lg font-semibold hover:bg-teal-700 disabled:bg-gray-300 transition-colors"
+            >
+              Submit adoption request
+            </button>
           </form>
         )}
       </div>

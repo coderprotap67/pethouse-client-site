@@ -10,17 +10,20 @@ export default function AllPetsPage() {
 
   useEffect(() => {
     const fetchPets = async () => {
-      const res = await api.get(`/pets?search=${search}&species=${species}`);
-      setPets(res.data);
+      try {
+        const res = await api.get(`/pets?search=${search}&species=${species}`);
+        setPets(res.data);
+      } catch (error) {
+        console.error("Error fetching pets in frontend:", error);
+      }
     };
     fetchPets();
   }, [search, species]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 p-4 max-w-7xl mx-auto">
       <h1 className="text-3xl font-bold">All Available Pets</h1>
       
-      {/* Filters Form */}
       <div className="flex flex-col md:flex-row gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
         <input 
           type="text" 
@@ -41,8 +44,6 @@ export default function AllPetsPage() {
           <option value="Rabbit">Rabbit</option>
         </select>
       </div>
-
-      {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {pets.length > 0 ? (
           pets.map(pet => <PetCard key={pet._id} pet={pet} />)

@@ -1,29 +1,19 @@
 'use client';
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import api from '../utils/api';
-import PetCard from '../components/PetCard';
 import { FaStethoscope, FaHouseChimney, FaHeart } from 'react-icons/fa6'; 
 
 export default function HomePage() {
-  const [featuredPets, setFeaturedPets] = useState([]);
-
-  useEffect(() => {
-    api.get('/pets').then(res => setFeaturedPets(res.data.slice(0, 6)));
-  }, []);
   return (
-    <div className="space-y-16">
+    <div className="space-y-16 max-w-7xl mx-auto p-4">
+      
+      {/* 🚀 Hero Section */}
       <section className="bg-gradient-to-r from-teal-500 to-emerald-600 rounded-3xl p-8 md:p-16 text-white flex flex-col items-center text-center space-y-6 shadow-xl">
         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">Find Your Forever Furry Friend</h1>
         <p className="text-lg md:text-xl max-w-2xl text-teal-50">Every pet deserves a loving home. Browse through our listings and adopt your perfect companion today.</p>
         <Link href="/pets" className="bg-white text-teal-600 font-bold px-8 py-4 rounded-full shadow-lg hover:bg-teal-50 transition transform hover:-translate-y-1">Adopt Now</Link>
       </section>
-      <section className="space-y-6">
-        <h2 className="text-3xl font-bold text-center">Featured Pets Waiting For You</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featuredPets.map(pet => <PetCard key={pet._id} pet={pet} />)}
-        </div>
-      </section>
+
+      {/* 📝 ৩টি ফিচার কার্ড সেকশন */}
       <section className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 grid md:grid-cols-3 gap-8 text-center">
         <div className="p-4 space-y-3 flex flex-col items-center">
           <div className="text-4xl text-teal-600">
@@ -47,6 +37,8 @@ export default function HomePage() {
           <p className="text-gray-500">Join our local community of pet owners for ongoing support.</p>
         </div>
       </section>
+
+      {/* 🎥 Virtual Meet & Greets Section */}
       <section className="bg-amber-50 rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
         <div className="space-y-4 max-w-xl">
           <span className="bg-amber-200 text-amber-800 text-xs uppercase px-3 py-1 rounded-full font-bold">New Feature</span>
@@ -55,6 +47,7 @@ export default function HomePage() {
         </div>
         <button className="bg-amber-600 text-white px-6 py-3 rounded-xl font-semibold shadow hover:bg-amber-700 transition whitespace-nowrap">Learn How It Works</button>
       </section>
+
     </div>
   );
 }
