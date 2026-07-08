@@ -14,7 +14,8 @@ export default function PetDetailsPage() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    api.get(`/api/pets/${id}`)
+    // 📋 এখানে আগে `/api/pets/${id}` ছিল, সেটা পরিবর্তন করে শুধু `/pets/${id}` করা হয়েছে
+    api.get(`/pets/${id}`)
       .then(res => setPet(res.data))
       .catch(err => console.error("Error fetching pet details:", err));
   }, [id]);
@@ -44,7 +45,8 @@ export default function PetDetailsPage() {
     };
 
     try {
-      await api.post('/api/requests', requestData);
+      // 📋 রিকোয়েস্ট পোস্ট করার এপিআই থেকেও বাড়তি /api কেটে শুধু /requests করা হয়েছে
+      await api.post('/requests', requestData);
       toast.success("Adoption request sent successfully!");
       router.push('/dashboard/my-requests');
     } catch (error) {
@@ -55,7 +57,6 @@ export default function PetDetailsPage() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 p-4 max-w-7xl mx-auto">
       <div className="lg:col-span-2 bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-        {/* 📋 এখানে pet.imageURL ফিক্স করা হয়েছে */}
         <img src={pet.imageURL} alt={pet.name} className="w-full h-96 object-cover" />
         <div className="p-6 space-y-4">
           <div className="flex justify-between items-center">
