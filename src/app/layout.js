@@ -12,7 +12,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-gray-50 text-gray-900 flex flex-col min-h-screen">
+      <body className="bg-[#0B132B] text-gray-100 flex flex-col min-h-screen antialiased">
         <AuthProvider>
           <Toaster position="top-center" />
           <Navbar />

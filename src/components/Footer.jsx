@@ -2,26 +2,28 @@ import { FaGithub, FaLinkedin, FaFacebook, FaInstagram, FaEnvelope, FaPhone } fr
 
 export default function Footer() {
   return (
-    <footer className="bg-white border-t border-gray-100 py-10 mt-12 text-center text-sm text-gray-500">
+    // 🌌 ডিপ ডার্ক ব্যাকগ্রাউন্ড এবং বর্ডার
+    <footer className="bg-[#080E20] border-t border-[#3A506B]/20 py-10 mt-12 text-center text-sm text-gray-400">
       <div className="container mx-auto px-4 space-y-6">
         
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 text-gray-600 font-medium">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 text-gray-300 font-medium">
           <div className="flex items-center gap-2">
-            <FaEnvelope className="text-teal-600" />
+            <FaEnvelope className="text-cyan-400" />
             <span>support@pethouse.com</span>
           </div>
-          <span className="hidden sm:inline text-gray-300">|</span>
+          <span className="hidden sm:inline text-[#3A506B]">|</span>
           <div className="flex items-center gap-2">
-            <FaPhone className="text-teal-600" />
+            <FaPhone className="text-cyan-400" />
             <span>+1 (555) 019-2834</span>
           </div>
         </div>
+
         <div className="flex justify-center items-center gap-6 text-xl">
           <a 
             href="https://github.com" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="text-gray-400 hover:text-gray-900 transition-colors"
+            className="text-gray-500 hover:text-white transition-colors"
             title="GitHub"
           >
             <FaGithub />
@@ -30,7 +32,7 @@ export default function Footer() {
             href="https://linkedin.com" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="text-gray-400 hover:text-blue-700 transition-colors"
+            className="text-gray-500 hover:text-cyan-400 transition-colors"
             title="LinkedIn"
           >
             <FaLinkedin />
@@ -39,7 +41,7 @@ export default function Footer() {
             href="https://facebook.com" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="text-gray-400 hover:text-blue-600 transition-colors"
+            className="text-gray-500 hover:text-blue-400 transition-colors"
             title="Facebook"
           >
             <FaFacebook />
@@ -48,16 +50,16 @@ export default function Footer() {
             href="https://instagram.com" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="text-gray-400 hover:text-pink-600 transition-colors"
+            className="text-gray-500 hover:text-pink-400 transition-colors"
             title="Instagram"
           >
             <FaInstagram />
           </a>
         </div>
 
-        <div className="space-y-1 pt-4 border-t border-gray-50">
-          <p className="font-semibold text-gray-700">PetHouse Adoption Portal © 2026</p>
-          <p className="max-w-md mx-auto text-gray-400 text-xs">
+        <div className="space-y-1 pt-4 border-t border-[#3A506B]/10">
+          <p className="font-semibold text-gray-300">PetHouse Adoption Portal © 2026</p>
+          <p className="max-w-md mx-auto text-gray-500 text-xs">
             Connecting loving homes with pets in need. Support, Care, and Secure adoption.
           </p>
         </div>
