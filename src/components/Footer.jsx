@@ -19,7 +19,7 @@ export default function Footer() {
 
         <div className="flex justify-center items-center gap-6 text-xl">
           <a 
-            href="https://github.com" 
+            href="https://github.com/coderprotap67" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="text-gray-500 hover:text-white transition-colors"
@@ -28,7 +28,7 @@ export default function Footer() {
             <FaGithub />
           </a>
           <a 
-            href="https://linkedin.com" 
+            href="https://www.linkedin.com/in/protap-chakma-53185630a/" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="text-gray-500 hover:text-cyan-400 transition-colors"
@@ -37,7 +37,7 @@ export default function Footer() {
             <FaLinkedin />
           </a>
           <a 
-            href="https://facebook.com" 
+            href="https://www.facebook.com/profile.php?id=61591796121562" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="text-gray-500 hover:text-blue-400 transition-colors"
@@ -46,7 +46,7 @@ export default function Footer() {
             <FaFacebook />
           </a>
           <a 
-            href="https://instagram.com" 
+            href="https://instagram.com/prota_p67" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="text-gray-500 hover:text-pink-400 transition-colors"
