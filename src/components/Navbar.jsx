@@ -7,7 +7,6 @@ export default function Navbar() {
   const { user, logout } = useAuth();
 
   return (
-    // 🌌 ডার্ক ব্লার ব্যাকগ্রাউন্ড এবং বর্ডার ইফেক্ট
     <nav className="bg-[#0B132B]/80 border-b border-[#3A506B]/20 sticky top-0 z-40 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
         

@@ -2,7 +2,6 @@ import { FaGithub, FaLinkedin, FaFacebook, FaInstagram, FaEnvelope, FaPhone } fr
 
 export default function Footer() {
   return (
-    // 🌌 ডিপ ডার্ক ব্যাকগ্রাউন্ড এবং বর্ডার
     <footer className="bg-[#080E20] border-t border-[#3A506B]/20 py-10 mt-12 text-center text-sm text-gray-400">
       <div className="container mx-auto px-4 space-y-6">
         
