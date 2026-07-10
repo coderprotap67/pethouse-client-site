@@ -21,56 +21,54 @@ export default function LoginPage() {
       toast.error('Invalid credentials, please try again.');
     }
   };
-
   const handleGoogleLogin = () => {
     toast.success('Google Login simulated successfully!');
     router.push('/');
   };
-
   return (
-    <div className="max-w-md w-full mx-auto my-12 bg-white p-8 rounded-2xl shadow-sm border border-gray-100 space-y-6">
+    <div className="max-w-md w-full mx-auto my-12 bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-700 space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold">Welcome Back</h1>
-        <p className="text-sm text-gray-400">Login to your PetHouse account</p>
+        <h1 className="text-3xl font-bold text-white">Welcome Back</h1>
+        <p className="text-sm text-slate-400">Login to your PetHouse account</p>
       </div>
 
       <form onSubmit={handleLogin} className="space-y-4">
         <div>
-          <label className="text-xs font-semibold text-gray-500 uppercase">Email</label>
+          <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Email</label>
           <input 
             type="email" 
             required 
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full mt-1 p-3 border border-gray-200 rounded-xl focus:outline-teal-500 bg-gray-50"
+            className="w-full mt-1 p-3 border border-slate-600 rounded-xl focus:outline-teal-500 bg-slate-900 text-white placeholder-slate-500"
             placeholder="example@mail.com"
           />
         </div>
         <div>
-          <label className="text-xs font-semibold text-gray-500 uppercase">Password</label>
+          <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Password</label>
           <input 
             type="password" 
             required 
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full mt-1 p-3 border border-gray-200 rounded-xl focus:outline-teal-500 bg-gray-50"
+            className="w-full mt-1 p-3 border border-slate-600 rounded-xl focus:outline-teal-500 bg-slate-900 text-white placeholder-slate-500"
             placeholder="••••••••"
           />
         </div>
-        <button type="submit" className="w-full bg-teal-600 text-white p-3 rounded-xl font-semibold hover:bg-teal-700 transition">
+        <button type="submit" className="w-full bg-teal-600 text-white p-3 rounded-xl font-semibold hover:bg-teal-500 transition duration-200 shadow-lg shadow-teal-900/20">
           Login
         </button>
       </form>
 
       <div className="relative flex py-2 items-center">
-        <div className="flex-grow border-t border-gray-200"></div>
-        <span className="flex-shrink mx-4 text-gray-400 text-xs uppercase">Or</span>
-        <div className="flex-grow border-t border-gray-200"></div>
+        <div className="flex-grow border-t border-slate-700"></div>
+        <span className="flex-shrink mx-4 text-slate-500 text-xs uppercase tracking-wider">Or</span>
+        <div className="flex-grow border-t border-slate-700"></div>
       </div>
 
       <button 
         onClick={handleGoogleLogin}
-        className="w-full flex items-center justify-center gap-3 border border-gray-200 p-3 rounded-xl hover:bg-gray-50 transition font-medium"
+        className="w-full flex items-center justify-center gap-3 border border-slate-600 p-3 rounded-xl hover:bg-slate-700 text-white font-medium transition duration-200"
       >
         <svg className="w-5 h-5" viewBox="0 0 24 24">
           <path fill="#EA4335" d="M12 5.04c1.66 0 3.2.57 4.38 1.69l3.27-3.27C17.67 1.62 15.03 1 12 1 7.24 1 3.2 3.74 1.25 7.72l3.8 2.95C6.01 7.28 8.78 5.04 12 5.04z"/>
@@ -80,9 +78,8 @@ export default function LoginPage() {
         </svg>
         Continue with Google
       </button>
-
-      <p className="text-center text-sm text-gray-500">
-        Don't have an account? <Link href="/register" className="text-teal-600 font-semibold hover:underline">Register here</Link>
+      <p className="text-center text-sm text-slate-400">
+        Don't have an account? <Link href="/register" className="text-teal-400 font-semibold hover:underline hover:text-teal-300">Register here</Link>
       </p>
     </div>
   );
