@@ -1,12 +1,8 @@
 "use client";
-
 import { createContext, useContext, useEffect, useState } from "react";
-
 const ThemeContext = createContext(null);
-
 export default function MyThemeProvider({ children }) {
   const [theme, setThemeState] = useState("light");
-
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme") || "light";
     setThemeState(savedTheme);
@@ -25,7 +21,6 @@ export default function MyThemeProvider({ children }) {
       document.documentElement.classList.remove("dark");
     }
   };
-
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
       {children}
