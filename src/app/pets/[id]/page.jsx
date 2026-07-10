@@ -14,7 +14,6 @@ export default function PetDetailsPage() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    // 📋 এখানে আগে `/api/pets/${id}` ছিল, সেটা পরিবর্তন করে শুধু `/pets/${id}` করা হয়েছে
     api.get(`/pets/${id}`)
       .then(res => setPet(res.data))
       .catch(err => console.error("Error fetching pet details:", err));
@@ -45,7 +44,6 @@ export default function PetDetailsPage() {
     };
 
     try {
-      // 📋 রিকোয়েস্ট পোস্ট করার এপিআই থেকেও বাড়তি /api কেটে শুধু /requests করা হয়েছে
       await api.post('/requests', requestData);
       toast.success("Adoption request sent successfully!");
       router.push('/dashboard/my-requests');
@@ -58,7 +56,6 @@ export default function PetDetailsPage() {
     <div className="min-h-screen bg-slate-950 text-slate-100 p-4">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto py-6">
         
-        {/* Left Side: Pet Info Card */}
         <div className="lg:col-span-2 bg-slate-900 rounded-2xl overflow-hidden shadow-xl border border-slate-800">
           <img src={pet.imageURL} alt={pet.name} className="w-full h-96 object-cover" />
           <div className="p-6 space-y-4">
@@ -79,8 +76,6 @@ export default function PetDetailsPage() {
             <p className="text-slate-300 leading-relaxed">{pet.description}</p>
           </div>
         </div>
-
-        {/* Right Side: Adoption Panel Form */}
         <div className="bg-slate-900 p-6 rounded-2xl shadow-xl border border-slate-800 h-fit space-y-4">
           <h2 className="text-xl font-bold border-b border-slate-800 pb-2 text-white">Adoption Form</h2>
           {pet.status === 'adopted' ? (

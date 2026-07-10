@@ -24,7 +24,6 @@ export default function LoginPage() {
 
   const handleGoogleLogin = () => {
     toast.success('Google Login simulated successfully!');
-    // Real Google Auth popup trigger logic goes here
     router.push('/');
   };
 
