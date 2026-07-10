@@ -16,7 +16,6 @@ export default function MyListingsPage() {
       api.get(`/owner-listings?email=${user.email}`).then(res => setListings(res.data));
     }
   };
-
   useEffect(() => { fetchListings(); }, [user]);
 
   const openRequestsModal = async (petId) => {
@@ -29,13 +28,12 @@ export default function MyListingsPage() {
     try {
       await api.patch(`/requests-status/${reqId}`, { status, petId });
       toast.success(`Request ${status}`);
-      openRequestsModal(petId); // refresh modal data
-      fetchListings(); // refresh main list
+      openRequestsModal(petId); 
+      fetchListings(); 
     } catch {
       toast.error("Operation failed");
     }
   };
-
   const handleDelete = async (id) => {
     if (confirm("Are you sure you want to delete this listing?")) {
       await api.delete(`/pets/${id}`);
@@ -43,7 +41,6 @@ export default function MyListingsPage() {
       fetchListings();
     }
   };
-
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-bold">My Pet Listings</h2>
@@ -63,8 +60,6 @@ export default function MyListingsPage() {
           </div>
         ))}
       </div>
-
-      {/* Requests Management Modal */}
       {selectedPetId && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50 animate-fadeIn">
           <div className="bg-white p-6 rounded-xl max-w-xl w-full max-h-[80vh] overflow-y-auto relative">
