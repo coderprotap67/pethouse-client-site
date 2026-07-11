@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { FcGoogle } from 'react-icons/fc';
+import axios from 'axios';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -11,9 +12,9 @@ export default function RegisterPage() {
   });
   const router = useRouter();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
-    const { password, confirmPassword } = formData;
+    const { name, email, photoURL, password, confirmPassword } = formData;
 
     if (password.length < 6) {
       return toast.error('Password must be at least 6 characters long.');
@@ -27,8 +28,31 @@ export default function RegisterPage() {
     if (password !== confirmPassword) {
       return toast.error('Password and Confirm Password must match.');
     }
-    toast.success('Registration successful! Redirecting to login...');
-    router.push('/login');
+
+    const loadingToast = toast.loading('Registering user...');
+
+    try {
+      const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      
+      const response = await axios.post(`${backendUrl}/api/register`, {
+        name,
+        email,
+        password
+      });
+
+      toast.dismiss(loadingToast);
+
+      if (response.data.success) {
+        toast.success('Registration successful! Redirecting to login...');
+        router.push('/login');
+      } else {
+        toast.error(response.data.message || 'Registration failed.');
+      }
+    } catch (error) {
+      toast.dismiss(loadingToast);
+      toast.error(error.response?.data?.message || 'Something went wrong during registration.');
+      console.error(error);
+    }
   };
 
   const handleGoogleRegister = async () => {
@@ -66,8 +90,9 @@ export default function RegisterPage() {
               </label>
               <input 
                 type={field.type} 
-                required 
+                required={field.key !== 'photoURL'}
                 placeholder={field.placeholder}
+                value={formData[field.key]}
                 onChange={(e) => setFormData({...formData, [field.key]: e.target.value})} 
                 className="w-full px-4 py-3 border border-slate-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 bg-slate-950 placeholder-slate-600 transition-all text-sm text-white font-medium" 
               />
