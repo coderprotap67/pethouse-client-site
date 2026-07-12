@@ -5,41 +5,31 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { FcGoogle } from 'react-icons/fc';
 import axios from 'axios';
+import { authClient } from '@/lib/auth-client';
+import { useAuth } from '../../context/AuthContext';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
     name: '', email: '', photoURL: '', password: '', confirmPassword: ''
   });
+  const { loginWithGoogle } = useAuth();
   const router = useRouter();
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    const { name, email, photoURL, password, confirmPassword } = formData;
+    const { name, email, password, confirmPassword } = formData;
 
-    if (password.length < 6) {
-      return toast.error('Password must be at least 6 characters long.');
-    }
-    if (!/[A-Z]/.test(password)) {
-      return toast.error('Password must contain at least one uppercase letter.');
-    }
-    if (!/[a-z]/.test(password)) {
-      return toast.error('Password must contain at least one lowercase letter.');
-    }
-    if (password !== confirmPassword) {
-      return toast.error('Password and Confirm Password must match.');
-    }
+    if (password.length < 6) return toast.error('Password must be at least 6 characters long.');
+    if (!/[A-Z]/.test(password)) return toast.error('Password must contain at least one uppercase letter.');
+    if (!/[a-z]/.test(password)) return toast.error('Password must contain at least one lowercase letter.');
+    if (password !== confirmPassword) return toast.error('Password and Confirm Password must match.');
 
     const loadingToast = toast.loading('Registering user...');
 
     try {
-      const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+      const backendUrl = process.env.NEXT_PUBLIC_API_URL;
       
-      const response = await axios.post(`${backendUrl}/api/register`, {
-        name,
-        email,
-        password
-      });
-
+      const response = await axios.post(`${backendUrl}/api/register`, { name, email, password });
       toast.dismiss(loadingToast);
 
       if (response.data.success) {
@@ -54,21 +44,35 @@ export default function RegisterPage() {
       console.error(error);
     }
   };
-
   const handleGoogleRegister = async () => {
+    const loadingToast = toast.loading('Connecting with Google...');
     try {
-      toast.loading('Connecting with Google...');
+      const { data, error } = await authClient.signIn.social({
+        provider: "google",
+        dontRedirect: true,
+      });
+
+      if (error) throw new Error(error.message);
+
+      await loginWithGoogle({
+        name: data.user.name,
+        email: data.user.email,
+        photoURL: data.user.image
+      });
+
+      toast.dismiss(loadingToast);
+      toast.success('Google Registration Successful!');
+      router.push('/');
     } catch (error) {
-      toast.dismiss();
+      toast.dismiss(loadingToast);
       toast.error(error.message || 'Google Sign-up failed.');
+      console.error(error);
     }
   };
 
   return (
     <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-slate-950 py-12 px-4 sm:px-6 lg:px-8">
-      
-      <div className="max-w-md w-full bg-slate-900/90 backdrop-blur-md p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-slate-800 space-y-6 transition-all duration-300 hover:shadow-[0_8px_40px_rgb(0,0,0,0.4)]">
-        
+      <div className="max-w-md w-full bg-slate-900/90 backdrop-blur-md p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-slate-800 space-y-6">
         <div className="text-center space-y-2">
           <h1 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
             Create <span className="text-teal-400">Account</span>
@@ -85,9 +89,7 @@ export default function RegisterPage() {
             { label: 'Confirm Password', type: 'password', key: 'confirmPassword', placeholder: '••••••••' }
           ].map((field) => (
             <div key={field.key} className="space-y-1">
-              <label className="text-xs font-bold text-slate-400 uppercase tracking-wider pl-1">
-                {field.label}
-              </label>
+              <label className="text-xs font-bold text-slate-400 uppercase tracking-wider pl-1">{field.label}</label>
               <input 
                 type={field.type} 
                 required={field.key !== 'photoURL'}
@@ -98,11 +100,7 @@ export default function RegisterPage() {
               />
             </div>
           ))}
-          
-          <button 
-            type="submit" 
-            className="w-full mt-2 bg-teal-600 text-white py-3 rounded-2xl font-bold text-sm tracking-wide shadow-md shadow-teal-900/30 hover:bg-teal-500 hover:shadow-lg hover:shadow-teal-500/20 active:scale-[0.99] transition-all duration-200"
-          >
+          <button type="submit" className="w-full mt-2 bg-teal-600 text-white py-3 rounded-2xl font-bold text-sm tracking-wide shadow-md shadow-teal-900/30 hover:bg-teal-500 transition-all">
             Create Account
           </button>
         </form>
@@ -116,7 +114,7 @@ export default function RegisterPage() {
         <button 
           onClick={handleGoogleRegister}
           type="button" 
-          className="w-full flex items-center justify-center gap-3 border border-slate-700 bg-slate-950 text-slate-200 py-3 rounded-2xl font-semibold text-sm hover:bg-slate-800 hover:border-slate-600 active:scale-[0.99] transition-all duration-200 shadow-sm"
+          className="w-full flex items-center justify-center gap-3 border border-slate-700 bg-slate-950 text-slate-200 py-3 rounded-2xl font-semibold text-sm hover:bg-slate-800 transition-all"
         >
           <FcGoogle className="text-xl" />
           <span>Sign up with Google</span>
@@ -124,12 +122,9 @@ export default function RegisterPage() {
 
         <p className="text-center text-sm text-slate-400 font-medium pt-2">
           Already have an account?{' '}
-          <Link href="/login" className="text-teal-400 font-bold hover:text-teal-300 transition underline-offset-4 hover:underline">
-            Login here
-          </Link>
+          <Link href="/login" className="text-teal-400 font-bold hover:text-teal-300 transition underline-offset-4 hover:underline">Login here</Link>
         </p>
       </div>
-
     </div>
   );
 }

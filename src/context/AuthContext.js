@@ -3,6 +3,7 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import api from '../utils/api';
 
 const AuthContext = createContext();
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,10 +21,10 @@ export const AuthProvider = ({ children }) => {
     };
     checkUser();
   }, []);
+
   const login = async (email, password) => {
     try {
       const res = await api.post('/login', { email, password });
-      
       if (res.data.success) {
         setUser(res.data.user);
         return res.data;
@@ -33,6 +34,20 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       console.error("AuthContext Login Error:", err);
       throw err; 
+    }
+  };
+  const loginWithGoogle = async (googleData) => {
+    try {
+      const res = await api.post('/google-login', googleData);
+      if (res.data.success) {
+        setUser(res.data.user);
+        return res.data;
+      } else {
+        throw new Error(res.data.message || 'Google authentication failed');
+      }
+    } catch (err) {
+      console.error("Google Login Error in Context:", err);
+      throw err;
     }
   };
 
@@ -46,9 +61,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, setUser, loading, login, logout, loginWithGoogle }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
 export const useAuth = () => useContext(AuthContext);

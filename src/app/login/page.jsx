@@ -4,11 +4,12 @@ import { useAuth } from '../../context/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import { authClient } from '@/lib/auth-client';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const router = useRouter();
 
   const handleLogin = async (e) => {
@@ -21,10 +22,31 @@ export default function LoginPage() {
       toast.error('Invalid credentials, please try again.');
     }
   };
-  const handleGoogleLogin = () => {
-    toast.success('Google Login simulated successfully!');
-    router.push('/');
+  const handleGoogleLogin = async () => {
+    const loadingToast = toast.loading('Connecting with Google...');
+    try {
+      const { data, error } = await authClient.signIn.social({
+        provider: "google",
+        dontRedirect: true, 
+      });
+
+      if (error) throw new Error(error.message);
+      await loginWithGoogle({
+        name: data.user.name,
+        email: data.user.email,
+        photoURL: data.user.image
+      });
+
+      toast.dismiss(loadingToast);
+      toast.success('Google Login Successful!');
+      router.push('/');
+    } catch (err) {
+      toast.dismiss(loadingToast);
+      toast.error(err.message || 'Google Auth Failed');
+      console.error(err);
+    }
   };
+
   return (
     <div className="max-w-md w-full mx-auto my-12 bg-slate-800 p-8 rounded-2xl shadow-xl border border-slate-700 space-y-6">
       <div className="text-center space-y-2">

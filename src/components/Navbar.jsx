@@ -5,44 +5,41 @@ import { FaUserCircle } from 'react-icons/fa';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
-
   return (
     <nav className="bg-[#0B132B]/80 border-b border-[#3A506B]/20 sticky top-0 z-40 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
-        
-        <div className="flex-1 justify-start">
+                <div className="flex-1 justify-start">
           <Link href="/" className="text-2xl font-black text-cyan-400 tracking-tight hover:opacity-90 transition">
             PetHouse
           </Link>
         </div>
-        
-        <div className="flex items-center gap-8 text-sm font-medium text-gray-300">
+                <div className="flex items-center gap-8 text-sm font-medium text-gray-300">
           <Link href="/" className="hover:text-cyan-400 transition">Home</Link>
           <Link href="/pets" className="hover:text-cyan-400 transition">All Pets</Link>
         </div>
-        
-        <div className="flex-1 flex justify-end items-center gap-5 text-sm font-medium text-gray-300">
+                <div className="flex-1 flex justify-end items-center gap-5 text-sm font-medium text-gray-300">
           {user ? (
             <>
               <Link href="/dashboard/my-requests" className="hover:text-cyan-400 transition hidden sm:block">
                 Dashboard
               </Link>
-              
-              <div className="flex items-center gap-2 border-l pl-4 border-[#3A506B]/40">
+                            <Link 
+                href="/dashboard/profile" 
+                className="flex items-center gap-2 border-l pl-4 border-[#3A506B]/40 hover:opacity-80 transition cursor-pointer group"
+              >
                 {user.photoURL ? (
                   <img 
                     src={user.photoURL} 
                     alt="Profile" 
-                    className="w-8 h-8 rounded-full object-cover border border-cyan-400"
+                    className="w-8 h-8 rounded-full object-cover border border-cyan-400 group-hover:border-cyan-300 transition"
                   />
                 ) : (
-                  <FaUserCircle className="text-2xl text-gray-400" />
+                  <FaUserCircle className="text-2xl text-gray-400 group-hover:text-cyan-400 transition" />
                 )}
-                <span className="text-gray-200 hidden md:inline max-w-[90px] truncate">
-                  {user.displayName || 'User'}
+                <span className="text-gray-200 hidden md:inline max-w-[90px] truncate group-hover:text-cyan-400 transition">
+                  {user.name || 'User'}
                 </span>
-              </div>
-
+              </Link>
               <button 
                 onClick={logout} 
                 className="bg-[#1C2541] border border-[#3A506B]/50 text-gray-200 px-4 py-2 rounded-xl hover:bg-[#3A506B]/40 transition"
