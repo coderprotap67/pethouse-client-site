@@ -8,12 +8,12 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 text-gray-300 font-medium">
           <div className="flex items-center gap-2">
             <FaEnvelope className="text-cyan-400" />
-            <span>support@pethouse.com</span>
+            <span>chakmaprotap855@gmail.com</span>
           </div>
           <span className="hidden sm:inline text-[#3A506B]">|</span>
           <div className="flex items-center gap-2">
             <FaPhone className="text-cyan-400" />
-            <span>+1 (555) 019-2834</span>
+            <span>+8801533098947</span>
           </div>
         </div>
 
@@ -57,12 +57,11 @@ export default function Footer() {
         </div>
 
         <div className="space-y-1 pt-4 border-t border-[#3A506B]/10">
-          <p className="font-semibold text-gray-300">PetHouse Adoption Portal © 2026</p>
+          <p className="font-semibold text-gray-300">Pet Adoption Portal © 2026</p>
           <p className="max-w-md mx-auto text-gray-500 text-xs">
             Connecting loving homes with pets in need. Support, Care, and Secure adoption.
           </p>
         </div>
-
       </div>
     </footer>
   );

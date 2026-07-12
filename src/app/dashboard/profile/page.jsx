@@ -54,7 +54,7 @@ export default function ProfilePage() {
           <h1 className="text-3xl font-black tracking-tight text-white sm:text-4xl">
             My <span className="text-teal-400">Profile</span>
           </h1>
-          <p className="text-sm text-slate-400 font-medium">View and update your PetHouse account details</p>
+          <p className="text-sm text-slate-400 font-medium">View and update your Pet Adoption Portal account details</p>
         </div>
         <form onSubmit={handleUpdateProfile} className="space-y-5">
                     <div className="space-y-1">
