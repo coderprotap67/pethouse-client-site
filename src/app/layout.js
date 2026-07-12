@@ -5,7 +5,7 @@ import '../app/globals.css';
 import { Toaster } from 'react-hot-toast';
 
 export const metadata = {
-  title: 'PetHouse',
+  title: 'Pet Adoption',
   description: 'Adopt pets near you securely.',
 };
 
