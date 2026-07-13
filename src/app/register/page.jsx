@@ -25,10 +25,8 @@ export default function RegisterPage() {
     if (password !== confirmPassword) return toast.error('Password and Confirm Password must match.');
 
     const loadingToast = toast.loading('Registering user...');
-
     try {
       const backendUrl = process.env.NEXT_PUBLIC_API_URL;
-      
       const response = await axios.post(`${backendUrl}/api/register`, { name, email, password });
       toast.dismiss(loadingToast);
 
@@ -45,24 +43,15 @@ export default function RegisterPage() {
     }
   };
   const handleGoogleRegister = async () => {
-    const loadingToast = toast.loading('Connecting with Google...');
+    const loadingToast = toast.loading('Opening Google Accounts...');
     try {
-      const { data, error } = await authClient.signIn.social({
+      await authClient.signIn.social({
         provider: "google",
-        dontRedirect: true,
+        callbackURL: "/", 
       });
-
-      if (error) throw new Error(error.message);
-
-      await loginWithGoogle({
-        name: data.user.name,
-        email: data.user.email,
-        photoURL: data.user.image
-      });
-
+      
       toast.dismiss(loadingToast);
-      toast.success('Google Registration Successful!');
-      router.push('/');
+      toast.success('Google Authentication Initiated!');
     } catch (error) {
       toast.dismiss(loadingToast);
       toast.error(error.message || 'Google Sign-up failed.');
