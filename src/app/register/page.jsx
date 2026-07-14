@@ -42,18 +42,15 @@ export default function RegisterPage() {
       console.error(error);
     }
   };
+
   const handleGoogleRegister = async () => {
-    const loadingToast = toast.loading('Opening Google Accounts...');
+    toast.success('Opening Google Accounts...');
     try {
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/", 
+        callbackURL: "https://pet-client-site.vercel.app", 
       });
-      
-      toast.dismiss(loadingToast);
-      toast.success('Google Authentication Initiated!');
     } catch (error) {
-      toast.dismiss(loadingToast);
       toast.error(error.message || 'Google Sign-up failed.');
       console.error(error);
     }

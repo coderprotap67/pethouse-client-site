@@ -22,18 +22,16 @@ export default function LoginPage() {
       toast.error('Invalid credentials, please try again.');
     }
   };
+
   const handleGoogleLogin = async () => {
-    const loadingToast = toast.loading('Opening Google Accounts...');
+    toast.success('Opening Google Accounts...');
     try {
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/", 
+        // প্রো-টিপ: রিডাইরেকশনের জন্য আপনার ফ্রন্টএন্ডের লাইভ ইউআরএল ব্যবহার করুন
+        callbackURL: "https://pet-client-site.vercel.app/", 
       });
-      
-      toast.dismiss(loadingToast);
-      toast.success('Google Authentication Initiated!');
     } catch (err) {
-      toast.dismiss(loadingToast);
       toast.error(err.message || 'Google Auth Failed');
       console.error(err);
     }
