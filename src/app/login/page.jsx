@@ -28,8 +28,7 @@ export default function LoginPage() {
     try {
       await authClient.signIn.social({
         provider: "google",
-        // প্রো-টিপ: রিডাইরেকশনের জন্য আপনার ফ্রন্টএন্ডের লাইভ ইউআরএল ব্যবহার করুন
-        callbackURL: "https://pet-client-site.vercel.app/", 
+        callbackURL: typeof window !== 'undefined' ? window.location.origin : "https://pet-client-site.vercel.app", 
       });
     } catch (err) {
       toast.error(err.message || 'Google Auth Failed');

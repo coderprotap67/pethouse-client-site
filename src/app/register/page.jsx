@@ -48,7 +48,7 @@ export default function RegisterPage() {
     try {
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "https://pet-client-site.vercel.app", 
+        callbackURL: typeof window !== 'undefined' ? window.location.origin : "https://pet-client-site.vercel.app", 
       });
     } catch (error) {
       toast.error(error.message || 'Google Sign-up failed.');
