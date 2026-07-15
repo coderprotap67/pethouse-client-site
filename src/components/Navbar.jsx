@@ -11,7 +11,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
                 <div className="flex-1 justify-start">
           <Link href="/" className="text-2xl font-black text-cyan-400 tracking-tight hover:opacity-90 transition">
-            PetHouse
+            Pet Adoption Platform
           </Link>
         </div>
                 <div className="flex items-center gap-8 text-sm font-medium text-gray-300">
