@@ -14,7 +14,6 @@ export default function RegisterPage() {
   });
   const { loginWithGoogle } = useAuth();
   const router = useRouter();
-
   const handleRegister = async (e) => {
     e.preventDefault();
     const { name, email, password, confirmPassword } = formData;
@@ -42,14 +41,36 @@ export default function RegisterPage() {
       console.error(error);
     }
   };
-
   const handleGoogleRegister = async () => {
     toast.success('Opening Google Accounts...');
     try {
-      await authClient.signIn.social({
+      const targetOrigin = typeof window !== 'undefined' ? window.location.origin : "https://pet-client-site.vercel.app";
+      
+      const data = await authClient.signIn.social({
         provider: "google",
-        callbackURL: typeof window !== 'undefined' ? window.location.origin : "https://pet-client-site.vercel.app", 
+        callbackURL: `${targetOrigin}/`, 
+        redirect: false, 
       });
+
+      if (data?.url) {
+        const width = 500;
+        const height = 650;
+        const left = window.screen.width / 2 - width / 2;
+        const top = window.screen.height / 2 - height / 2;
+
+        const popup = window.open(
+          data.url,
+          "Google Sign In",
+          `width=${width},height=${height},top=${top},left=${left},resizable=yes,scrollbars=yes,status=yes`
+        );
+
+        const timer = setInterval(() => {
+          if (popup.closed) {
+            clearInterval(timer);
+            window.location.href = "/";
+          }
+        }, 1000);
+      }
     } catch (error) {
       toast.error(error.message || 'Google Sign-up failed.');
       console.error(error);
