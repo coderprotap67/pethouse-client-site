@@ -4,7 +4,8 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BETTER_AUTH_URL || "https://pet-serv
 
 async function handleProxy(request) {
   const backendUrl = `${BACKEND_URL}${request.nextUrl.pathname}${request.nextUrl.search}`;
-    const headers = new Headers(request.headers);
+  
+  const headers = new Headers(request.headers);
   const parsedUrl = new URL(BACKEND_URL);
   headers.set("host", parsedUrl.host);
 
@@ -22,14 +23,25 @@ async function handleProxy(request) {
       method: request.method,
       headers: headers,
       body: body,
-      redirect: "manual",
+      redirect: "manual", 
     });
-    const newResponse = new NextResponse(response.body, {
-      status: response.status,
-      headers: {
-        "Content-Type": response.headers.get("Content-Type") || "application/json",
-      },
-    });
+
+    let redirectUrl = response.headers.get("location");
+    if (redirectUrl) {
+      if (redirectUrl.startsWith(BACKEND_URL)) {
+        redirectUrl = redirectUrl.replace(BACKEND_URL, "https://pet-client-site.vercel.app");
+      } else if (redirectUrl.startsWith("/")) {
+        redirectUrl = `https://pet-client-site.vercel.app${redirectUrl}`;
+      }
+    }
+    const newResponse = redirectUrl 
+      ? NextResponse.redirect(redirectUrl, { status: 302 })
+      : new NextResponse(response.body, {
+          status: response.status,
+          headers: {
+            "Content-Type": response.headers.get("Content-Type") || "application/json",
+          },
+        });
     const setCookieHeader = response.headers.getSetCookie();
     if (setCookieHeader && setCookieHeader.length > 0) {
       setCookieHeader.forEach((cookie) => {
