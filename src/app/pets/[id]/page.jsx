@@ -2,7 +2,6 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
-import api from '../../../utils/api';
 import toast from 'react-hot-toast';
 
 export default function PetDetailsPage() {
@@ -13,13 +12,17 @@ export default function PetDetailsPage() {
   const [pickupDate, setPickupDate] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     if (!id) return;
     setLoading(true);
-    api.get(`/pets/${id}`)
+    
+    fetch(`https://pet-server-site.vercel.app/api/pets/${id}`)
       .then(res => {
-        setPet(res.data);
+        if (!res.ok) throw new Error("Failed to fetch pet details");
+        return res.json();
+      })
+      .then(data => {
+        setPet(data);
         setLoading(false);
       })
       .catch(err => {
@@ -28,6 +31,7 @@ export default function PetDetailsPage() {
         setLoading(false);
       });
   }, [id]);
+
   if (loading) {
     return (
       <div className="min-h-[calc(100vh-64px)] bg-[#0B132B] flex flex-col items-center justify-center text-white">
@@ -53,6 +57,7 @@ export default function PetDetailsPage() {
     if (user.email === pet.ownerEmail) {
       return toast.error("You cannot adopt your own listed pet!");
     }
+    
     const requestData = {
       petId: pet._id,
       petName: pet.name,
@@ -63,18 +68,31 @@ export default function PetDetailsPage() {
       message,
       status: 'pending'
     };
+
     try {
-      await api.post('/requests', requestData);
+      const response = await fetch('https://pet-server-site.vercel.app/api/requests', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/center',
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (!response.ok) throw new Error("Failed to send adoption request");
+
       toast.success("Adoption request sent successfully!");
       router.push('/dashboard/my-requests');
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to send request.");
+      console.error(error);
+      toast.error("Failed to send request.");
     }
   };
+
   return (
     <div className="min-h-[calc(100vh-64px)] bg-[#0B132B] text-slate-100 p-4 sm:p-6 lg:p-8">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto py-6">
-                <div className="lg:col-span-2 bg-[#1C2541]/90 backdrop-blur-md rounded-3xl overflow-hidden shadow-2xl border border-[#3A506B]/40">          <div className="relative h-96 w-full bg-[#0B132B] border-b border-[#3A506B]/20">
+        <div className="lg:col-span-2 bg-[#1C2541]/90 backdrop-blur-md rounded-3xl overflow-hidden shadow-2xl border border-[#3A506B]/40">          
+          <div className="relative h-96 w-full bg-[#0B132B] border-b border-[#3A506B]/20">
             <img 
               src={pet.image || pet.imageURL || "https://placedog.net/600/400"} 
               alt={pet.name} 
@@ -118,6 +136,7 @@ export default function PetDetailsPage() {
             </div>
           </div>
         </div>
+        
         <div className="bg-[#1C2541]/90 backdrop-blur-md p-6 rounded-3xl shadow-2xl border border-[#3A506B]/40 h-fit space-y-5">
           <div className="border-b border-[#3A506B]/30 pb-3">
             <h2 className="text-xl font-black text-white tracking-tight">
@@ -169,7 +188,6 @@ export default function PetDetailsPage() {
             </form>
           )}
         </div>
-
       </div>
     </div>
   );
