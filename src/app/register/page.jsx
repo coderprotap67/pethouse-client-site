@@ -6,14 +6,13 @@ import toast from 'react-hot-toast';
 import { FcGoogle } from 'react-icons/fc';
 import axios from 'axios';
 import { authClient } from '@/lib/auth-client';
-import { useAuth } from '../../context/AuthContext';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
     name: '', email: '', photoURL: '', password: '', confirmPassword: ''
   });
-  const { loginWithGoogle } = useAuth();
   const router = useRouter();
+
   const handleRegister = async (e) => {
     e.preventDefault();
     const { name, email, password, confirmPassword } = formData;
@@ -65,8 +64,9 @@ export default function RegisterPage() {
         );
 
         const timer = setInterval(() => {
-          if (popup.closed) {
+          if (popup && popup.closed) {
             clearInterval(timer);
+            toast.success("Logged in successfully!");
             window.location.href = "/";
           }
         }, 1000);

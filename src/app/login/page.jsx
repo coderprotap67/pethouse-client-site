@@ -9,7 +9,7 @@ import { authClient } from '@/lib/auth-client';
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { login, loginWithGoogle } = useAuth();
+  const { login } = useAuth();
   const router = useRouter();
 
   const handleLogin = async (e) => {
@@ -46,8 +46,9 @@ export default function LoginPage() {
         );
 
         const timer = setInterval(() => {
-          if (popup.closed) {
+          if (popup && popup.closed) {
             clearInterval(timer);
+            toast.success("Logged in successfully!");
             window.location.href = "/";
           }
         }, 1000);
