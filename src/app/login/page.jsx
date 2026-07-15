@@ -50,7 +50,6 @@ export default function LoginPage() {
           if (popup && popup.closed) {
             clearInterval(timer);
             toast.success("Logged in successfully!");
-            // সেশন কুকি রিফ্রেশ করার জন্য হার্ড রিডাইরেক্ট করা হলো
             window.location.href = "/";
           }
         }, 1000);

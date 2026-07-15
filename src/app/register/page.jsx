@@ -44,13 +44,12 @@ export default function RegisterPage() {
   const handleGoogleRegister = async () => {
     toast.success('Opening Google Accounts...');
     try {
-      // উইন্ডো অবজেক্ট থেকে ফ্রন্টএন্ড ডোমেইনের অরিজিনাল ইউআরএল নেওয়া
       const targetOrigin = typeof window !== 'undefined' ? window.location.origin : "https://pet-client-site.vercel.app";
       
       const data = await authClient.signIn.social({
         provider: "google",
-        callbackURL: `${targetOrigin}/`, // গুগল লগইন শেষে এই ফ্রন্টএন্ড ডোমেইনে ফেরত আনবে
-        redirect: false, // ব্রাউজার রিডাইরেক্ট বন্ধ করে আমরা পপ-আপে হ্যান্ডেল করব
+        callbackURL: `${targetOrigin}/`,
+        redirect: false, 
       });
 
       if (data?.url) {
@@ -69,7 +68,6 @@ export default function RegisterPage() {
           if (popup && popup.closed) {
             clearInterval(timer);
             toast.success("Logged in successfully!");
-            // পেজ হার্ড রিফ্রেশ করে সেশন কুকি ব্রাউজারে সক্রিয় করার জন্য নিচের লাইনটি বেস্ট
             window.location.href = "/"; 
           }
         }, 1000);
