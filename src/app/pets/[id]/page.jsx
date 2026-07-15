@@ -12,6 +12,7 @@ export default function PetDetailsPage() {
   const [pickupDate, setPickupDate] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     if (!id) return;
     setLoading(true);
@@ -73,7 +74,7 @@ export default function PetDetailsPage() {
       const response = await fetch('https://pet-server-site.vercel.app/api/requests', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/center',
+          'Content-Type': 'application/json', 
         },
         body: JSON.stringify(requestData),
       });
