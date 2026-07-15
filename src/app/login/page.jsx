@@ -22,6 +22,7 @@ export default function LoginPage() {
       toast.error('Invalid credentials, please try again.');
     }
   };
+
   const handleGoogleLogin = async () => {
     toast.success('Opening Google Accounts...');
     try {
@@ -49,6 +50,7 @@ export default function LoginPage() {
           if (popup && popup.closed) {
             clearInterval(timer);
             toast.success("Logged in successfully!");
+            // সেশন কুকি রিফ্রেশ করার জন্য হার্ড রিডাইরেক্ট করা হলো
             window.location.href = "/";
           }
         }, 1000);
@@ -105,6 +107,7 @@ export default function LoginPage() {
 
         <button 
           onClick={handleGoogleLogin}
+          type="button"
           className="w-full flex items-center justify-center gap-3 border border-slate-700 bg-slate-950 text-slate-200 py-3 rounded-2xl font-semibold text-sm hover:bg-slate-800 transition-all"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -115,6 +118,7 @@ export default function LoginPage() {
           </svg>
           <span>Continue with Google</span>
         </button>
+
         <p className="text-center text-sm text-slate-400 font-medium pt-2">
           Don't have an account? <Link href="/register" className="text-teal-400 font-bold hover:text-teal-300 transition underline-offset-4 hover:underline">Register here</Link>
         </p>
