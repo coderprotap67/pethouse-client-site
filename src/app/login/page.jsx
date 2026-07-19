@@ -26,7 +26,7 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     toast.success('Opening Google Accounts...');
     try {
-      const targetOrigin = typeof window !== 'undefined' ? window.location.origin : "https://pet-client-site.vercel.app";
+      const targetOrigin = typeof window !== 'undefined' ? window.location.origin : "https://pethouse-client-site.vercel.app";
 
       const data = await authClient.signIn.social({
         provider: "google",

@@ -1,7 +1,7 @@
 import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient({
-  baseURL: "https://pet-server-site.vercel.app",
+  baseURL: "https://pethouse-server-site.vercel.app",
   fetchOptions: {
     credentials: "include" 
   }
