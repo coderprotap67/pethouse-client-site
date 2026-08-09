@@ -1,6 +1,7 @@
 'use client';
 import { createContext, useContext, useState, useEffect } from 'react';
 import api from '../utils/api';
+import { authClient } from '@/lib/auth-client';
 
 const AuthContext = createContext();
 
@@ -8,23 +9,41 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const { data: session, isPending } = authClient.useSession();
+
   useEffect(() => {
     const checkUser = async () => {
-      try {
-        const res = await api.get('/user-me');
-        if (res.data.user) setUser(res.data.user);
-      } catch (err) {
-        setUser(null);
-      } finally {
+      if (session?.user) {
+        setUser({
+          name: session.user.name,
+          email: session.user.email,
+          photoURL: session.user.image,
+        });
         setLoading(false);
+        return;
+      }
+      if (!isPending) {
+        try {
+          const res = await api.get('/api/user-me');
+          if (res.data?.user) {
+            setUser(res.data.user);
+          } else {
+            setUser(null);
+          }
+        } catch (err) {
+          setUser(null);
+        } finally {
+          setLoading(false);
+        }
       }
     };
+
     checkUser();
-  }, []);
+  }, [session, isPending]);
 
   const login = async (email, password) => {
     try {
-      const res = await api.post('/login', { email, password });
+      const res = await api.post('/api/login', { email, password });
       if (res.data.success) {
         setUser(res.data.user);
         return res.data;
@@ -36,9 +55,10 @@ export const AuthProvider = ({ children }) => {
       throw err; 
     }
   };
+
   const loginWithGoogle = async (googleData) => {
     try {
-      const res = await api.post('/google-login', googleData);
+      const res = await api.post('/api/google-login', googleData);
       if (res.data.success) {
         setUser(res.data.user);
         return res.data;
@@ -53,7 +73,8 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await api.post('/logout');
+      await authClient.signOut();
+      await api.post('/api/logout');
       setUser(null);
     } catch (err) {
       console.error("Logout Error:", err);
