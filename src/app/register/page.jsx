@@ -45,9 +45,7 @@ export default function RegisterPage() {
     toast.success('Redirecting to Google Sign Up...');
     try {
       const targetOrigin = typeof window !== 'undefined' ? window.location.origin : "https://pethouse-client-site.vercel.app";
-      
-      // direct redirect method for cross-origin consistency
-      await authClient.signIn.social({
+            await authClient.signIn.social({
         provider: "google",
         callbackURL: `${targetOrigin}/`,
         dontRedirect: false, 

@@ -4,16 +4,12 @@ import api from '../utils/api';
 import { authClient } from '@/lib/auth-client';
 
 const AuthContext = createContext();
-
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
   const { data: session, isPending } = authClient.useSession();
-
   useEffect(() => {
     const checkUser = async () => {
-      // 1. Google Session Sync
       if (session?.user) {
         setUser({
           name: session.user.name,
@@ -22,7 +18,6 @@ export const AuthProvider = ({ children }) => {
         });
 
         try {
-          // Exchange Google session for a valid JWT Token
           const res = await api.post('/api/jwt', {
             name: session.user.name,
             email: session.user.email
@@ -36,8 +31,6 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
         return;
       }
-
-      // 2. Custom Login Check
       if (!isPending) {
         try {
           const res = await api.get('/api/user-me');

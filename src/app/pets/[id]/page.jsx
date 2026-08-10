@@ -142,8 +142,6 @@ export default function PetDetailsPage() {
             </div>
           </div>
         </div>
-
-        {/* Right Column: Adoption Form */}
         <div className="bg-[#1C2541]/90 backdrop-blur-md p-6 rounded-3xl shadow-2xl border border-[#3A506B]/40 h-fit space-y-5">
           <div className="border-b border-[#3A506B]/30 pb-3">
             <h2 className="text-xl font-black text-white tracking-tight">

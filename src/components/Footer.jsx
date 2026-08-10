@@ -46,7 +46,7 @@ export default function Footer() {
             <FaFacebook />
           </a>
           <a 
-            href="https://instagram.com/prota_p67" 
+            href="https://instagram.com/ore_wa_protap" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="text-gray-500 hover:text-pink-400 transition-colors"

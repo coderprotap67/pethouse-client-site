@@ -11,7 +11,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const { login } = useAuth();
   const router = useRouter();
-
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -22,13 +21,10 @@ export default function LoginPage() {
       toast.error('Invalid credentials, please try again.');
     }
   };
-
   const handleGoogleLogin = async () => {
     toast.success('Redirecting to Google Sign In...');
     try {
       const targetOrigin = typeof window !== 'undefined' ? window.location.origin : "https://pethouse-client-site.vercel.app";
-
-      // direct redirect method for cross-origin consistency
       await authClient.signIn.social({
         provider: "google",
         callbackURL: `${targetOrigin}/`, 
@@ -39,7 +35,6 @@ export default function LoginPage() {
       console.error(err);
     }
   };
-
   return (
     <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-slate-950 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full bg-[#1C2541]/90 backdrop-blur-md p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.2)] border border-[#3A506B]/40 space-y-6">
@@ -77,13 +72,11 @@ export default function LoginPage() {
             Login
           </button>
         </form>
-
         <div className="relative flex py-2 items-center">
           <div className="flex-grow border-t border-slate-700"></div>
           <span className="flex-shrink mx-4 text-slate-500 text-xs uppercase font-bold tracking-widest">Or</span>
           <div className="flex-grow border-t border-slate-700"></div>
         </div>
-
         <button 
           onClick={handleGoogleLogin}
           type="button"
@@ -97,7 +90,6 @@ export default function LoginPage() {
           </svg>
           <span>Continue with Google</span>
         </button>
-
         <p className="text-center text-sm text-slate-400 font-medium pt-2">
           Don't have an account? <Link href="/register" className="text-teal-400 font-bold hover:text-teal-300 transition underline-offset-4 hover:underline">Register here</Link>
         </p>
