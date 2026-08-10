@@ -13,15 +13,31 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const checkUser = async () => {
+      // 1. Google Session Sync
       if (session?.user) {
         setUser({
           name: session.user.name,
           email: session.user.email,
           photoURL: session.user.image,
         });
+
+        try {
+          // Exchange Google session for a valid JWT Token
+          const res = await api.post('/api/jwt', {
+            name: session.user.name,
+            email: session.user.email
+          });
+          if (res.data?.token) {
+            localStorage.setItem('token', res.data.token);
+          }
+        } catch (e) {
+          console.error("JWT sync error:", e);
+        }
         setLoading(false);
         return;
       }
+
+      // 2. Custom Login Check
       if (!isPending) {
         try {
           const res = await api.get('/api/user-me');
@@ -41,12 +57,10 @@ export const AuthProvider = ({ children }) => {
     checkUser();
   }, [session, isPending]);
 
-  // 🔒 Login Handler (LocalStorage-এ Token সেভ করা নিশ্চিত করা হয়েছে)
   const login = async (email, password) => {
     try {
       const res = await api.post('/api/login', { email, password });
       if (res.data.success) {
-        // Token টি LocalStorage এ সেভ করা হলো
         if (res.data.token) {
           localStorage.setItem('token', res.data.token);
         }
@@ -61,25 +75,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const loginWithGoogle = async (googleData) => {
-    try {
-      const res = await api.post('/api/google-login', googleData);
-      if (res.data.success) {
-        if (res.data.token) {
-          localStorage.setItem('token', res.data.token);
-        }
-        setUser(res.data.user);
-        return res.data;
-      } else {
-        throw new Error(res.data.message || 'Google authentication failed');
-      }
-    } catch (err) {
-      console.error("Google Login Error in Context:", err);
-      throw err;
-    }
-  };
-
-  // 🔒 Logout Handler (Token এবং Session মুছে ফেলার কাজ করে)
   const logout = async () => {
     try {
       await authClient.signOut();
@@ -87,14 +82,13 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       console.error("Logout Error:", err);
     } finally {
-      // LocalStorage থেকে টোকেন রিমুভ ও স্টেট রিসেট
       localStorage.removeItem('token');
       setUser(null);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading, login, logout, loginWithGoogle }}>
+    <AuthContext.Provider value={{ user, setUser, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
