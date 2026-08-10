@@ -41,10 +41,15 @@ export const AuthProvider = ({ children }) => {
     checkUser();
   }, [session, isPending]);
 
+  // 🔒 Login Handler (LocalStorage-এ Token সেভ করা নিশ্চিত করা হয়েছে)
   const login = async (email, password) => {
     try {
       const res = await api.post('/api/login', { email, password });
       if (res.data.success) {
+        // Token টি LocalStorage এ সেভ করা হলো
+        if (res.data.token) {
+          localStorage.setItem('token', res.data.token);
+        }
         setUser(res.data.user);
         return res.data;
       } else {
@@ -60,6 +65,9 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await api.post('/api/google-login', googleData);
       if (res.data.success) {
+        if (res.data.token) {
+          localStorage.setItem('token', res.data.token);
+        }
         setUser(res.data.user);
         return res.data;
       } else {
@@ -71,13 +79,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // 🔒 Logout Handler (Token এবং Session মুছে ফেলার কাজ করে)
   const logout = async () => {
     try {
       await authClient.signOut();
       await api.post('/api/logout');
-      setUser(null);
     } catch (err) {
       console.error("Logout Error:", err);
+    } finally {
+      // LocalStorage থেকে টোকেন রিমুভ ও স্টেট রিসেট
+      localStorage.removeItem('token');
+      setUser(null);
     }
   };
 
