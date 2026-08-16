@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation'; 
 import api from '../../utils/api';
 import PetCard from '../../components/PetCard';
 
@@ -8,7 +9,23 @@ export default function AllPetsPage() {
   const [search, setSearch] = useState('');
   const [species, setSpecies] = useState('all');
   const [dataLoading, setDataLoading] = useState(true);
+  const [authLoading, setAuthLoading] = useState(true); 
+
+  const router = useRouter();
+
   useEffect(() => {
+    const token = localStorage.getItem('token'); 
+
+    if (!token) {
+      router.push('/login');
+    } else {
+      setAuthLoading(false);
+    }
+  }, [router]);
+
+  useEffect(() => {
+    if (authLoading) return;
+
     const timer = setTimeout(async () => {
       try {
         setDataLoading(true);
@@ -21,16 +38,29 @@ export default function AllPetsPage() {
         }
         const queryString = query.toString();
         const endpoint = queryString ? `/pets?${queryString}` : '/pets';
-        const res = await api.get(endpoint);
+                const res = await api.get(endpoint);
         setPets(res.data);
       } catch (error) {
         console.error("Error fetching pets:", error);
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          localStorage.removeItem('token');
+          router.push('/login');
+        }
       } finally {
         setDataLoading(false);
       }
     }, 300); 
+
     return () => clearTimeout(timer);
-  }, [search, species]);
+  }, [search, species, authLoading, router]);
+  if (authLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <p className="text-cyan-400 font-medium animate-pulse">Checking authentication...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8 p-4 max-w-7xl mx-auto text-gray-100">
       <h1 className="text-3xl font-black text-white tracking-tight">All Available Pets</h1>
