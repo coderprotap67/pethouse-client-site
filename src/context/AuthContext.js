@@ -4,10 +4,12 @@ import api from '../utils/api';
 import { authClient } from '@/lib/auth-client';
 
 const AuthContext = createContext();
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const { data: session, isPending } = authClient.useSession();
+
   useEffect(() => {
     const checkUser = async () => {
       if (session?.user) {
@@ -18,7 +20,7 @@ export const AuthProvider = ({ children }) => {
         });
 
         try {
-          const res = await api.post('/api/jwt', {
+          const res = await api.post('/jwt', {
             name: session.user.name,
             email: session.user.email
           });
@@ -31,9 +33,10 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
         return;
       }
+
       if (!isPending) {
         try {
-          const res = await api.get('/api/user-me');
+          const res = await api.get('/user-me');
           if (res.data?.user) {
             setUser(res.data.user);
           } else {
@@ -52,7 +55,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const res = await api.post('/api/login', { email, password });
+      const res = await api.post('/login', { email, password });
       if (res.data.success) {
         if (res.data.token) {
           localStorage.setItem('token', res.data.token);
@@ -71,7 +74,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await authClient.signOut();
-      await api.post('/api/logout');
+      await api.post('/logout');
     } catch (err) {
       console.error("Logout Error:", err);
     } finally {
